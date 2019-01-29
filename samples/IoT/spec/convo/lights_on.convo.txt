@@ -1,0 +1,9 @@
+lights off
+
+#me
+set lights concentrate
+
+#bot
+INTENT HomeAutomation.TurnOn
+ENTITIES HomeAutomation.Operation|...
+ENTITY_VALUES concentrate|lights

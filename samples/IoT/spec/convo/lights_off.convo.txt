@@ -1,0 +1,10 @@
+lights on
+
+#me
+turn off living room light
+
+#bot
+INTENT HomeAutomation.TurnOff
+INTENT_CONFIDENCE 80
+ENTITIES HomeAutomation.Room
+ENTITY_VALUES living room

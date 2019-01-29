@@ -62,13 +62,13 @@ class BotiumConnectorLuis {
             nlp: {
               intent: {
                 name: data.topScoringIntent.intent,
-                condfidence: data.topScoringIntent.score,
+                confidence: data.topScoringIntent.score,
                 intents: data.intents
-                  ? data.intents.map((intent) => { return {name: intent.intent, condfidence: intent.score} })
+                  ? data.intents.map((intent) => { return {name: intent.intent, confidence: intent.score} })
                   : []
               },
               entities: data.entities
-                ? data.entities.map((entity) => { return {name: entity.entity, condfidence: entity.score, type: entity.type} })
+                ? data.entities.map((entity) => { return {name: entity.type, confidence: entity.score, value: entity.entity} })
                 : []
             }
           }
