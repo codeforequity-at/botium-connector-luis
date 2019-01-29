@@ -24,7 +24,7 @@ It can be used as any other Botium connector with all Botium Stack components:
 ## Prerequisites
 
 * [LUIS account](https://www.luis.ai/home)
-* LUIS project (Just to try this connector you can use public IoT project used for the [interactive demonstration](https://azure.microsoft.com/en-us/services/cognitive-services/language-understanding-intelligent-service/))
+* LUIS project (Just to try this connector you can use public IoT project from Microsoft used for the [interactive demonstration](https://azure.microsoft.com/en-us/services/cognitive-services/language-understanding-intelligent-service/))
 * Application ID
     * Open your project, then go to Manage, Application Information, Application ID    
     * The Id for the public IoT project is df67dcdb-c37d-46af-88e1-8b97951ca1c2
@@ -60,6 +60,13 @@ It depending how you want to run them:
 * [Botium CLI](https://github.com/codeforequity-at/botium-cli/)
 * [Botium Bindings](https://github.com/codeforequity-at/botium-bindings/)
 * [Botium Box](https://www.botium.at)
+
+## How to start sample
+
+There is a small demo in [samples/IoT dir](./samples/IoT) with Botium Bindings. 
+This tests the public IoT project. 
+So to start it you have to cretate botium.json from 
+[sample.botium.json](./samples/IoT/sample.botium.json), and add your authoring key to it.
 
 ## Supported Capabilities
 
