@@ -1,5 +1,4 @@
 const debug = require('debug')('botium-connector-luis')
-const _ = require('lodash')
 const util = require('util')
 const request = require('request')
 const querystring = require('querystring')
