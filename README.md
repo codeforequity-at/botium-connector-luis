@@ -2,7 +2,7 @@
 
 [![NPM](https://nodei.co/npm/botium-connector-luis.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/botium-connector-luis/)
 
-[ ![Codeship Status for codeforequity-at/botium-connector-google-assistant](https://app.codeship.com/projects/f379ece0-ee76-0136-6e85-5afc45d94643/status?branch=master)](https://app.codeship.com/projects/320125)
+[![Codeship Status for codeforequity-at/botium-connector-luis](https://app.codeship.com/projects/671767d0-0777-0137-514b-1ae61d02a015/status?branch=master)](https://app.codeship.com/projects/325831)
 [![npm version](https://badge.fury.io/js/botium-connector-luis.svg)](https://badge.fury.io/js/botium-connector-luis)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 
