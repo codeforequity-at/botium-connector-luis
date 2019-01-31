@@ -1,18 +1,18 @@
-# Botium Connector for Google Assistant
+# Botium Connector for Microsoft LUIS
 
-[![NPM](https://nodei.co/npm/botium-connector-google-assistant.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/botium-connector-google-assistant/)
+[![NPM](https://nodei.co/npm/botium-connector-luis.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/botium-connector-luis/)
 
 [ ![Codeship Status for codeforequity-at/botium-connector-google-assistant](https://app.codeship.com/projects/f379ece0-ee76-0136-6e85-5afc45d94643/status?branch=master)](https://app.codeship.com/projects/320125)
-[![npm version](https://badge.fury.io/js/botium-connector-google-assistant.svg)](https://badge.fury.io/js/botium-connector-google-assistant)
+[![npm version](https://badge.fury.io/js/botium-connector-luis.svg)](https://badge.fury.io/js/botium-connector-luis)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 
-This is a [Botium](https://github.com/codeforequity-at/botium-core) connector for testing your Action in Google Assistant.
+This is a [Botium](https://github.com/codeforequity-at/botium-core) connector for testing your Microsoft LUIS intent resolution logic.
 
 __Did you read the [Botium in a Nutshell](https://medium.com/@floriantreml/botium-in-a-nutshell-part-1-overview-f8d0ceaf8fb4) articles? Be warned, without prior knowledge of Botium you won't be able to properly use this library!__
 
 ## How it works
 
-LUIS is jut an NLP. It does not answers, just returns intent, entities. 
+LUIS is just an NLP. It does not answers, just returns intent, entities. 
 So you are not able to test the answers, as for a chatbot engine. 
 But you can check intent, and entities, and use other [asserter and logic hook](https://github.com/codeforequity-at/botium-core/wiki/Botium-Scripting#asserters-and-logic-hooks).
 
