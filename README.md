@@ -23,6 +23,7 @@ It can be used as any other Botium connector with all Botium Stack components:
 
 ## Prerequisites
 
+* __Node.js and NPM__
 * [LUIS account](https://www.luis.ai/home)
 * LUIS project (Just to try this connector you can use public IoT project from Microsoft used for the [interactive demonstration](https://azure.microsoft.com/en-us/services/cognitive-services/language-understanding-intelligent-service/))
 * Application ID
@@ -31,16 +32,36 @@ It can be used as any other Botium connector with all Botium Stack components:
 * LUIS key
     * [authoring key](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-get-started-node-get-intent#get-luis-key) (up to 1000 queries to the prediction endpoint API per month for all your LUIS apps)
     * [subscription keys](https://docs.microsoft.com/en-us/azure/cognitive-services/LUIS/luis-how-to-azure-subscription) (Azure account required, free tier possible)
-    
-The connector repository includes a tool to compose the Botium capabilities (including private keys, access tokens etc). Create a project directory of your choice, and follow the steps below.
+* a __project directory__ on your workstation to hold test cases and Botium configuration    
 
-## How to use
+## Install Botium and Microsoft LUIS Connector
 
-### Create your testcases
+When using __Botium CLI__:
 
-### Create botium.json
+```
+> npm install -g botium-cli
+> npm install -g botium-connector-luis
+> botium-cli init
+> botium-cli run
+```
+
+When using __Botium Bindings__:
+
+```
+> npm install -g botium-bindings
+> npm install -g botium-connector-luis
+> botium-bindings init mocha
+> npm install && npm run mocha
+```
+
+When using __Botium Box__:
+
+_Already integrated into Botium Box, no setup required_
+
+## Connecting Microsoft Luis to Botium
 
 Create a botium.json with Application ID, and LUIS key:
+
 ```javascript
 {
   "botium": {
@@ -54,19 +75,15 @@ Create a botium.json with Application ID, and LUIS key:
 }
 ```
 
-### Run your testcases
-
-It depending how you want to run them:
-* [Botium CLI](https://github.com/codeforequity-at/botium-cli/)
-* [Botium Bindings](https://github.com/codeforequity-at/botium-bindings/)
-* [Botium Box](https://www.botium.at)
+Botium setup is ready, you can begin to write your [BotiumScript](https://github.com/codeforequity-at/botium-core/wiki/Botium-Scripting) files.
 
 ## How to start sample
 
-There is a small demo in [samples/IoT dir](./samples/IoT) with Botium Bindings. 
-This tests the public IoT project. 
-So to start it you have to cretate botium.json from 
-[sample.botium.json](./samples/IoT/sample.botium.json), and add your authoring key to it.
+There is a small demo in [samples/IoT dir](./samples/IoT) with Botium Bindings. This tests the public IoT project. 
+So to start it you have to create botium.json from [sample.botium.json](./samples/IoT/sample.botium.json), and add your authoring key to it. Afterwards:
+
+    > npm install
+    > npm test
 
 ## Supported Capabilities
 
