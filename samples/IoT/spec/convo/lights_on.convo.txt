@@ -1,4 +1,4 @@
-lights off
+lights on
 
 #me
 set lights concentrate
