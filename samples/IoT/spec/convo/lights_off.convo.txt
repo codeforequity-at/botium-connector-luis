@@ -1,4 +1,4 @@
-lights on
+lights off
 
 #me
 turn off living room light
