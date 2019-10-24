@@ -104,15 +104,15 @@ class BotiumConnectorLuis {
       const compositeEntityNames = compositeEntities ? compositeEntities.map(compositeEntity => compositeEntity.parentType) : null
       const keyToCompositeEntity = {}
       if (compositeEntityNames) {
-        for (const entity of entities) {
+        entities.forEach(entity => {
           if (compositeEntityNames.includes(entity.type)) {
             keyToCompositeEntity[toKey(entity)] = entity
           }
-        }
+        })
       }
 
       const result = []
-      for (const entity of entities) {
+      entities.forEach(entity => {
         const key = toKey(entity)
 
         if (keyToCompositeEntity[key]) {
@@ -165,7 +165,7 @@ class BotiumConnectorLuis {
           }
           result.push(normalized)
         }
-      }
+      })
       return result
     }
     // append query string to endpoint URL
