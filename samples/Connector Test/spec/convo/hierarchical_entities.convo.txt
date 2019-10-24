@@ -1,0 +1,9 @@
+hierarchical entities
+
+#me
+want to buy 2 business ticket
+
+#bot
+INTENT buy_ticket
+ENTITIES TestCompositeEntity.builtin.number|TestCompositeEntity.TravelClass
+ENTITY_VALUES 2|Business

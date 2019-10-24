@@ -1,0 +1,9 @@
+entities with roles
+
+#me
+want to travel from budapest to vienna
+
+#bot
+INTENT travel
+ENTITIES builtin.geographyV2.city|builtin.geographyV2.city
+ENTITY_VALUES budapest|vienna
