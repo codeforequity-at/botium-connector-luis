@@ -1,4 +1,4 @@
-hierarchical entities
+composite entities
 
 #me
 want to buy 2 business ticket
