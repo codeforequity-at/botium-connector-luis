@@ -1,6 +1,6 @@
 {
   "name": "botium-connector-luis",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Botium Connector for Luis",
   "main": "dist/botium-connector-luis-cjs.js",
   "module": "dist/botium-connector-luis-es.js",
@@ -19,22 +19,22 @@
   },
   "homepage": "https://github.com/codeforequity-at/botium-connector-luis#readme",
   "devDependencies": {
-    "eslint": "^4.19.1",
-    "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.11.0",
-    "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-promise": "^3.7.0",
-    "eslint-plugin-standard": "^3.1.0",
-    "rollup": "^0.58.2",
-    "rollup-plugin-buble": "^0.19.2",
-    "rollup-plugin-commonjs": "^9.1.3",
-    "rollup-plugin-json": "^2.3.0",
-    "rollup-plugin-node-resolve": "^3.3.0"
+    "eslint": "^6.3.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "rollup": "^1.20.3",
+    "rollup-plugin-buble": "^0.19.8",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
   },
   "dependencies": {
-    "debug": "^3.1.0",
+    "debug": "^4.1.1",
     "querystring": "^0.2.0",
     "request": "^2.88.0",
-    "save": "^2.3.3"
+    "save": "^2.4.0"
   }
 }
