@@ -7,6 +7,7 @@ const _ = require('lodash')
 // endpoint URL
 const ENDPOINT =
   'https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/'
+const INCOMPREHENSION_INTENT = 'None'
 
 const Capabilities = {
   LUIS_APP_ID: 'LUIS_APP_ID',
@@ -45,7 +46,7 @@ class BotiumConnectorLuis {
     }
 
     const isIncomprehension = (intent) => {
-      if (intent.intent === 'None') {
+      if (intent.intent === INCOMPREHENSION_INTENT) {
         return true
       }
     }
@@ -186,6 +187,17 @@ class BotiumConnectorLuis {
           debug(`Response: ${util.inspect(data)}`)
           if (!data.intents || !data.intents.length) {
             debug(`Empty response skipped`)
+            this.queueBotSays({
+              sender: 'bot',
+              nlp: {
+                intent: {
+                  name: INCOMPREHENSION_INTENT,
+                  incomprehension: true,
+                  confidence: 1
+                },
+                entities: []
+              }
+            })
             return resolve()
           }
           const structuredResponse = {
