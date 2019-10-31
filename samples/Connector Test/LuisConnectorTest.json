@@ -1,0 +1,197 @@
+{
+  "luis_schema_version": "4.0.0",
+  "versionId": "0.1",
+  "name": "LuisConnectorTest",
+  "desc": "",
+  "culture": "en-us",
+  "tokenizerVersion": "1.0.0",
+  "intents": [
+    {
+      "name": "buy_ticket"
+    },
+    {
+      "name": "move"
+    },
+    {
+      "name": "my_name"
+    },
+    {
+      "name": "None"
+    },
+    {
+      "name": "travel"
+    },
+    {
+      "name": "what_color"
+    }
+  ],
+  "entities": [
+    {
+      "name": "TestSimpleEntity",
+      "roles": []
+    },
+    {
+      "name": "TestHierarchicalEntity",
+      "children": [
+        "FirstChild",
+        "SecondChild"
+      ],
+      "roles": []
+    }
+  ],
+  "composites": [
+    {
+      "name": "TestCompositeEntity",
+      "children": [
+        "number",
+        "TravelClass"
+      ],
+      "roles": []
+    }
+  ],
+  "closedLists": [
+    {
+      "name": "TravelClass",
+      "subLists": [
+        {
+          "canonicalForm": "Business",
+          "list": []
+        },
+        {
+          "canonicalForm": "Economy",
+          "list": []
+        }
+      ],
+      "roles": []
+    },
+    {
+      "name": "TestListEntity",
+      "subLists": [
+        {
+          "canonicalForm": "blue",
+          "list": []
+        },
+        {
+          "canonicalForm": "black",
+          "list": []
+        }
+      ],
+      "roles": []
+    }
+  ],
+  "patternAnyEntities": [],
+  "regex_entities": [],
+  "prebuiltEntities": [
+    {
+      "name": "dimension",
+      "roles": []
+    },
+    {
+      "name": "geographyV2",
+      "roles": [
+        "TRAVELFROM",
+        "TRAVELTO"
+      ]
+    },
+    {
+      "name": "money",
+      "roles": []
+    },
+    {
+      "name": "number",
+      "roles": []
+    }
+  ],
+  "model_features": [],
+  "regex_features": [],
+  "patterns": [],
+  "utterances": [
+    {
+      "text": "decrease temperature for me please",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "dim kitchen lights to 25 .",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "i want to travel from paris to vienna",
+      "intent": "travel",
+      "entities": [
+        {
+          "entity": "geographyV2",
+          "role": "TRAVELFROM",
+          "startPos": 22,
+          "endPos": 26
+        },
+        {
+          "entity": "geographyV2",
+          "role": "TRAVELTO",
+          "startPos": 31,
+          "endPos": 36
+        }
+      ]
+    },
+    {
+      "text": "lower your volume",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "move john w. smith leaving seattle headed to dallas",
+      "intent": "move",
+      "entities": [
+        {
+          "entity": "TestHierarchicalEntity::FirstChild",
+          "startPos": 27,
+          "endPos": 33
+        },
+        {
+          "entity": "TestHierarchicalEntity::SecondChild",
+          "startPos": 45,
+          "endPos": 50
+        }
+      ]
+    },
+    {
+      "text": "my name is joe",
+      "intent": "my_name",
+      "entities": [
+        {
+          "entity": "TestSimpleEntity",
+          "startPos": 11,
+          "endPos": 13
+        }
+      ]
+    },
+    {
+      "text": "the sky is blue",
+      "intent": "what_color",
+      "entities": []
+    },
+    {
+      "text": "turn on the internet in my bedroom please",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "want to buy 2 business ticket",
+      "intent": "buy_ticket",
+      "entities": [
+        {
+          "entity": "TestCompositeEntity",
+          "startPos": 12,
+          "endPos": 12
+        },
+        {
+          "entity": "TestCompositeEntity",
+          "startPos": 14,
+          "endPos": 21
+        }
+      ]
+    }
+  ],
+  "settings": []
+}

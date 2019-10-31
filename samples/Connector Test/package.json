@@ -1,0 +1,24 @@
+{
+  "name": "iot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha spec"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "botium": {
+    "convodirs": [
+      "spec\\convo"
+    ],
+    "expandConvos": true,
+    "expandUtterancesToConvos": false
+  },
+  "devDependencies": {
+    "botium-bindings": "^2.0.18",
+    "botium-connector-luis": "../../",
+    "mocha": "latest"
+  }
+}

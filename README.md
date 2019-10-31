@@ -12,9 +12,14 @@ __Did you read the [Botium in a Nutshell](https://medium.com/@floriantreml/botiu
 
 ## How it works
 
-LUIS is just an NLP. It does not answers, just returns intent, entities. 
-So you are not able to test the answers, as for a chatbot engine. 
+LUIS is just a stateless NLP. It does send answer, just returns intent, entities.
+So you are not able to test the answers, as for a chatbot engine.
 But you can check intent, and entities, and use other [asserter and logic hook](https://github.com/codeforequity-at/botium-core/wiki/Botium-Scripting#asserters-and-logic-hooks).
+
+You can assert composite entities too:
+```
+INTENT <CompositeEntityName>.<EntityName>
+```
 
 It can be used as any other Botium connector with all Botium Stack components:
 * [Botium CLI](https://github.com/codeforequity-at/botium-cli/)
@@ -27,12 +32,12 @@ It can be used as any other Botium connector with all Botium Stack components:
 * [LUIS account](https://www.luis.ai/home)
 * LUIS project (Just to try this connector you can use public IoT project from Microsoft used for the [interactive demonstration](https://azure.microsoft.com/en-us/services/cognitive-services/language-understanding-intelligent-service/))
 * Application ID
-    * Open your project, then go to Manage, Application Information, Application ID    
+    * Open your project, then go to Manage, Application Information, Application ID
     * The Id for the public IoT project is df67dcdb-c37d-46af-88e1-8b97951ca1c2
 * LUIS key
     * [authoring key](https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-get-started-node-get-intent#get-luis-key) (up to 1000 queries to the prediction endpoint API per month for all your LUIS apps)
     * [subscription keys](https://docs.microsoft.com/en-us/azure/cognitive-services/LUIS/luis-how-to-azure-subscription) (Azure account required, free tier possible)
-* a __project directory__ on your workstation to hold test cases and Botium configuration    
+* a __project directory__ on your workstation to hold test cases and Botium configuration
 
 ## Install Botium and Microsoft LUIS Connector
 
@@ -79,7 +84,7 @@ Botium setup is ready, you can begin to write your [BotiumScript](https://github
 
 ## How to start sample
 
-There is a small demo in [samples/IoT dir](./samples/IoT) with Botium Bindings. This tests the public IoT project. 
+There is a small demo in [samples/IoT dir](./samples/IoT) with Botium Bindings. This tests the public IoT project.
 So to start it you have to create botium.json from [sample.botium.json](./samples/IoT/sample.botium.json), and add your authoring key to it. Afterwards:
 
     > npm install
