@@ -17,7 +17,7 @@
     "expandUtterancesToConvos": false
   },
   "devDependencies": {
-    "botium-bindings": "^2.0.18",
+    "botium-bindings": "latest",
     "botium-connector-luis": "../../",
     "mocha": "latest"
   }

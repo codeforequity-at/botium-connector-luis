@@ -19,8 +19,8 @@
     "expandUtterancesToConvos": false
   },
   "devDependencies": {
-    "mocha": "latest",
     "botium-bindings": "latest",
-    "botium-connector-luis": "../../"
+    "botium-connector-luis": "../../",
+    "mocha": "latest"
   }
 }

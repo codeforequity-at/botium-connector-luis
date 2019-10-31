@@ -63,3 +63,5 @@ typings/
 /samples/IoT/botium.json
 /samples/Connector Test/botium.json
 
+package-lock.json
+yarn.lock
