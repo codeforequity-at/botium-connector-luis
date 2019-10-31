@@ -15,7 +15,7 @@ const Capabilities = {
 }
 
 class BotiumConnectorLuis {
-  constructor ({queueBotSays, caps}) {
+  constructor ({ queueBotSays, caps }) {
     this.queueBotSays = queueBotSays
     this.caps = caps
   }
@@ -38,10 +38,10 @@ class BotiumConnectorLuis {
     return Promise.resolve()
   }
 
-  UserSays ({messageText}) {
+  UserSays ({ messageText }) {
     const queryParams = {
-      'verbose': true,
-      'q': messageText,
+      verbose: true,
+      q: messageText,
       'subscription-key': this.caps[Capabilities.LUIS_ENDPOINT_KEY]
     }
 
@@ -54,12 +54,12 @@ class BotiumConnectorLuis {
     // flattens composite entities
     // extracts entity value from resolution structure if possible
     // sets confidence to 1 if it is not returned by NLP
-    const normalizeEntities = ({entities, compositeEntities}) => {
+    const normalizeEntities = ({ entities, compositeEntities }) => {
       if (!entities) {
         return []
       }
       const toKey = (entity) => {
-        return JSON.stringify({entity: entity.entity, startIndex: entity.startIndex, endIndex: entity.endIndex})
+        return JSON.stringify({ entity: entity.entity, startIndex: entity.startIndex, endIndex: entity.endIndex })
       }
       const normalizeEntity = (entity) => {
         const r = entity.resolution
@@ -100,7 +100,7 @@ class BotiumConnectorLuis {
 
           return entity.entity
         }
-        return {name: entity.type, role: entity.role, confidence: entity.score, value: normalizeValue(entity)}
+        return { name: entity.type, role: entity.role, confidence: entity.score, value: normalizeValue(entity) }
       }
       const compositeEntityNames = compositeEntities ? compositeEntities.map(compositeEntity => compositeEntity.parentType) : null
       const keyToCompositeEntity = {}
@@ -186,7 +186,7 @@ class BotiumConnectorLuis {
           const data = JSON.parse(body)
           debug(`Response: ${util.inspect(data)}`)
           if (!data.intents || !data.intents.length) {
-            debug(`Empty response skipped`)
+            debug('Empty response skipped')
             this.queueBotSays({
               sender: 'bot',
               nlp: {
@@ -208,7 +208,7 @@ class BotiumConnectorLuis {
                 incomprehension: isIncomprehension(data.topScoringIntent),
                 confidence: data.topScoringIntent.score,
                 intents: data.intents ? data.intents.map((intent) => {
-                  return {name: intent.intent, confidence: intent.score, incomprehension: isIncomprehension(intent)}
+                  return { name: intent.intent, confidence: intent.score, incomprehension: isIncomprehension(intent) }
                 }) : []
               },
               entities: normalizeEntities(data)
