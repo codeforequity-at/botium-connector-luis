@@ -184,6 +184,10 @@ class BotiumConnectorLuis {
           }
           const data = JSON.parse(body)
           debug(`Response: ${util.inspect(data)}`)
+          if (!data.intents || !data.intents.length) {
+            debug(`Empty response skipped`)
+            return resolve()
+          }
           const structuredResponse = {
             sender: 'bot',
             nlp: {
