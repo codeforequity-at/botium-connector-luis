@@ -215,7 +215,7 @@ class BotiumConnectorLuis {
             }
           }
           debug(`Converted response: ${util.inspect(structuredResponse)}`)
-          this.queueBotSays(structuredResponse)
+          setTimeout(() => this.queueBotSays(structuredResponse), 0)
           return resolve()
         }
       })
