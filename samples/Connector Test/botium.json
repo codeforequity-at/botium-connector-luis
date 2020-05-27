@@ -1,7 +1,7 @@
 {
   "botium": {
     "Capabilities": {
-      "PROJECTNAME": "IoT",
+      "PROJECTNAME": "Botium Sample for LUIS",
       "CONTAINERMODE": "luis",
       "LUIS_APP_ID": "...",
       "LUIS_ENDPOINT_KEY": "..."

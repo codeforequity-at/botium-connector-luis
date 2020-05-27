@@ -6,7 +6,8 @@
   "module": "dist/botium-connector-luis-es.js",
   "scripts": {
     "build": "npm run eslint && rollup -c",
-    "eslint": "eslint index.js"
+    "eslint": "eslint index.js src",
+    "eslint-fix": "eslint --fix index.js src"
   },
   "repository": {
     "type": "git",
@@ -19,13 +20,13 @@
   },
   "homepage": "https://www.botium.ai",
   "devDependencies": {
-    "eslint": "^7.0.0",
+    "eslint": "^7.1.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "rollup": "^2.9.0",
+    "rollup": "^2.10.9",
     "rollup-plugin-buble": "^0.19.8",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-json": "^4.0.0",

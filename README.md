@@ -85,7 +85,7 @@ Botium setup is ready, you can begin to write your [BotiumScript](https://github
 ## How to start sample
 
 There is a small demo in [samples/IoT dir](./samples/IoT) with Botium Bindings. This tests the public IoT project.
-So to start it you have to create botium.json from [sample.botium.json](./samples/IoT/sample.botium.json), and add your authoring key to it. Afterwards:
+So to start it you have to add your authoring key to the _botium.json_ file. Afterwards:
 
     > npm install
     > npm test
@@ -93,6 +93,16 @@ So to start it you have to create botium.json from [sample.botium.json](./sample
 ## Supported Capabilities
 
 Set the capability __CONTAINERMODE__ to __luis__ to activate this connector.
+
+### LUIS_PREDICTION_ENDPOINT_URL
+_Default: https://westus.api.cognitive.microsoft.com_
+
+### LUIS_PREDICTION_ENDPOINT_SLOT
+_Default: staging_
+
+Possible values:
+* staging
+* production
 
 ### LUIS_APP_ID
 

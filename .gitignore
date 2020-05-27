@@ -60,8 +60,7 @@ typings/
 # next.js build output
 .next
 /.idea
-/samples/IoT/botium.json
-/samples/Connector Test/botium.json
 
 package-lock.json
 yarn.lock
+*.local.json
