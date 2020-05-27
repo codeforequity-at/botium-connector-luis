@@ -1,12 +1,16 @@
 {
   "name": "botium-connector-luis",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Botium Connector for Luis",
   "main": "dist/botium-connector-luis-cjs.js",
   "module": "dist/botium-connector-luis-es.js",
+  "bin": {
+    "botium-connector-luis-cli": "./bin/cli.js"
+  },
   "scripts": {
     "build": "npm run eslint && rollup -c",
-    "eslint": "eslint index.js"
+    "eslint": "eslint index.js src",
+    "eslint-fix": "eslint --fix index.js src"
   },
   "repository": {
     "type": "git",
@@ -19,21 +23,31 @@
   },
   "homepage": "https://www.botium.ai",
   "devDependencies": {
-    "eslint": "^7.0.0",
+    "@babel/core": "^7.9.6",
+    "@babel/node": "^7.8.7",
+    "@babel/plugin-transform-runtime": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "eslint": "^7.1.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "rollup": "^2.9.0",
-    "rollup-plugin-buble": "^0.19.8",
+    "rollup": "^2.10.9",
+    "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.2.0"
   },
   "dependencies": {
+    "@babel/runtime": "^7.9.6",
     "debug": "^4.1.1",
+    "mkdirp": "^1.0.4",
+    "moment": "^2.26.0",
     "querystring": "^0.2.0",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.8",
+    "slug": "^3.0.1",
+    "yargs": "^15.3.1"
   }
 }
