@@ -16,6 +16,13 @@ module.exports = {
   PluginDesc: {
     name: 'Microsoft LUIS',
     provider: 'Microsoft',
+    features: {
+      intentResolution: true,
+      intentConfidenceScore: true,
+      alternateIntents: true,
+      entityResolution: true,
+      entityConfidenceScore: true
+    },
     capabilities: [
       {
         name: 'LUIS_PREDICTION_ENDPOINT_URL',
@@ -46,14 +53,14 @@ module.exports = {
         name: 'LUIS_ENDPOINT_KEY',
         label: 'LUIS Endpoint Key',
         description: 'Azure Subscription Key for prediction - open your LUIS project, then go to Manage, Azure Resources',
-        type: 'string',
+        type: 'secret',
         required: true
       },
       {
         name: 'LUIS_AUTHORING_KEY',
         label: 'LUIS Authoring Key',
         description: 'Azure Subscription Key for authoring - open your LUIS project, then go to Manage, Azure Resources',
-        type: 'string',
+        type: 'secret',
         required: false
       }
     ]
