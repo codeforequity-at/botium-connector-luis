@@ -193,6 +193,10 @@ class BotiumConnectorLuis {
                   confidence: 1
                 },
                 entities: []
+              },
+              sourceData: {
+                request: luisRequest,
+                response: data
               }
             }), 0)
             return resolve()
@@ -209,6 +213,10 @@ class BotiumConnectorLuis {
                 }) : []
               },
               entities: normalizeEntities(data)
+            },
+            sourceData: {
+              request: luisRequest,
+              response: data
             }
           }
           debug(`Structured response: ${JSON.stringify(structuredResponse, null, 2)}`)
