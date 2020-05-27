@@ -58,7 +58,7 @@ const importLuisIntents = async ({ caps, versionId, buildconvos }) => {
   return { convos, utterances }
 }
 
-const exportLuisIntents = async ({ caps, versionId, newVersionName, publish, waitfortraining }, { convos, utterances }, { statusCallback }) => {
+const exportLuisIntents = async ({ caps, uploadmode, versionId, newVersionName, publish, waitfortraining }, { convos, utterances }, { statusCallback }) => {
   const driver = new botium.BotDriver(getCaps(caps))
   const container = await driver.Build()
 
@@ -68,6 +68,20 @@ const exportLuisIntents = async ({ caps, versionId, newVersionName, publish, wai
   const status = (log, obj) => {
     debug(log, obj)
     if (statusCallback) statusCallback(log, obj)
+  }
+
+  if (uploadmode === 'replace') {
+    appVersion.intents = []
+    appVersion.entities = []
+    appVersion.composites = []
+    appVersion.closedLists = []
+    appVersion.patternAnyEntities = []
+    appVersion.regex_entities = []
+    appVersion.prebuiltEntities = []
+    appVersion.model_features = []
+    appVersion.regex_features = []
+    appVersion.patterns = []
+    appVersion.utterances = []
   }
 
   if (!appVersion.utterances) appVersion.utterances = []
@@ -142,12 +156,17 @@ module.exports = {
       default: false
     }
   },
-  exportHandler: ({ caps, versionId, newVersionName, publish, waitfortraining, ...rest } = {}, { convos, utterances } = {}, { statusCallback } = {}) => exportLuisIntents({ caps, versionId, newVersionName, publish, waitfortraining, ...rest }, { convos, utterances }, { statusCallback }),
+  exportHandler: ({ caps, uploadmode, versionId, newVersionName, publish, waitfortraining, ...rest } = {}, { convos, utterances } = {}, { statusCallback } = {}) => exportLuisIntents({ caps, uploadmode, versionId, newVersionName, publish, waitfortraining, ...rest }, { convos, utterances }, { statusCallback }),
   exportArgs: {
     caps: {
       describe: 'Capabilities',
       type: 'json',
       skipCli: true
+    },
+    uploadmode: {
+      describe: 'Appending LUIS intents and user examples or replace them',
+      choices: ['append', 'replace'],
+      default: 'append'
     },
     versionId: {
       describe: 'LUIS app version (will use active version by default)',
