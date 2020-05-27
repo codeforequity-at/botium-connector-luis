@@ -50,7 +50,6 @@ class BotiumConnectorLuis {
       queryParams.staging = true
     }
 
-
     // flattens composite entities
     // extracts entity value from resolution structure if possible
     // sets confidence to 1 if it is not returned by NLP

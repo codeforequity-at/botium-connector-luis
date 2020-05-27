@@ -111,3 +111,7 @@ See Prerequisites
 ### LUIS_ENDPOINT_KEY
 
 See Prerequisites
+
+### LUIS_AUTHORING_KEY
+
+Required for test set upload/download

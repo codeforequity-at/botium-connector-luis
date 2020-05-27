@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha spec"
+    "test": "mocha spec",
+    "download-intents": "botium-connector-luis-cli import --output ./spec/luis-intents",
+    "download-testcases": "botium-connector-luis-cli import --buildconvos --output ./spec/luis-import",
+    "upload-intents": "botium-connector-luis-cli export --input spec/luis-intents --waitfortraining --versionId 0.1 --publish staging"
   },
   "author": "",
   "license": "ISC",

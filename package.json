@@ -4,6 +4,9 @@
   "description": "Botium Connector for Luis",
   "main": "dist/botium-connector-luis-cjs.js",
   "module": "dist/botium-connector-luis-es.js",
+  "bin": {
+    "botium-connector-luis-cli": "./bin/cli.js"
+  },
   "scripts": {
     "build": "npm run eslint && rollup -c",
     "eslint": "eslint index.js src",
@@ -34,7 +37,12 @@
   },
   "dependencies": {
     "debug": "^4.1.1",
+    "mkdirp": "^1.0.4",
+    "moment": "^2.26.0",
     "querystring": "^0.2.0",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.8",
+    "slug": "^3.0.1",
+    "yargs": "^15.3.1"
   }
 }

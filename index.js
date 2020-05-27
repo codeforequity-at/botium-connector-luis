@@ -1,8 +1,18 @@
 const BotiumConnectorLuis = require('./src/connector')
+const { importHandler, importArgs } = require('./src/intents')
+const { exportHandler, exportArgs } = require('./src/intents')
 
 module.exports = {
   PluginVersion: 1,
   PluginClass: BotiumConnectorLuis,
+  Import: {
+    Handler: importHandler,
+    Args: importArgs
+  },
+  Export: {
+    Handler: exportHandler,
+    Args: exportArgs
+  },
   PluginDesc: {
     name: 'Microsoft LUIS',
     provider: 'Microsoft',
@@ -21,8 +31,8 @@ module.exports = {
         type: 'choice',
         required: false,
         choices: [
-          { key: "staging", name: "Staging" },
-          { key: "production", name: "Production" }
+          { key: 'staging', name: 'Staging' },
+          { key: 'production', name: 'Production' }
         ]
       },
       {
@@ -35,10 +45,17 @@ module.exports = {
       {
         name: 'LUIS_ENDPOINT_KEY',
         label: 'LUIS Endpoint Key',
-        description: 'Azure Subscription Key - open your LUIS project, then go to Manage, Azure Resources, Primary Key',
+        description: 'Azure Subscription Key for prediction - open your LUIS project, then go to Manage, Azure Resources',
         type: 'string',
         required: true
+      },
+      {
+        name: 'LUIS_AUTHORING_KEY',
+        label: 'LUIS Authoring Key',
+        description: 'Azure Subscription Key for authoring - open your LUIS project, then go to Manage, Azure Resources',
+        type: 'string',
+        required: false
       }
     ]
-  }  
+  }
 }
