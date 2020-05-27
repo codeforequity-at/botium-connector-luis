@@ -99,9 +99,14 @@ module.exports.waitForTraining = async (caps, version, interval) => {
   const timeout = ms => new Promise(resolve => setTimeout(resolve, ms))
   while (true) {
     debug(`LUIS checking training status ${version}`)
+    let response = null
     try {
-      const response = await request(Object.assign({}, requestOptionsTemplate, { method: 'GET' }))
+      response = await request(Object.assign({}, requestOptionsTemplate, { method: 'GET' }))
       debug(`waitForTraining check training status response: ${JSON.stringify(response, null, 2)}`)
+    } catch (err) {
+      debug(`LUIS error on availability check ${err.message}`)
+    }
+    if (response) {
       if (response.find(model => model.details.status === 'Fail')) {
         throw new Error('LUIS app training failed. See Microsoft LUIS app for details.')
       } else if (response.find(model => model.details.status !== 'UpToDate' && model.details.status !== 'Success')) {
@@ -109,8 +114,6 @@ module.exports.waitForTraining = async (caps, version, interval) => {
       } else {
         return
       }
-    } catch (err) {
-      debug(`LUIS error on availability check ${err.message}`)
     }
     await timeout(interval || 5000)
   }
