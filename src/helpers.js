@@ -102,7 +102,9 @@ module.exports.waitForTraining = async (caps, version, interval) => {
     try {
       const response = await request(Object.assign({}, requestOptionsTemplate, { method: 'GET' }))
       debug(`waitForTraining check training status response: ${JSON.stringify(response, null, 2)}`)
-      if (response.find(model => model.details.status !== 'UpToDate' && model.details.status !== 'Success')) {
+      if (response.find(model => model.details.status === 'Fail')) {
+        throw new Error('LUIS app training failed. See Microsoft LUIS app for details.')
+      } else if (response.find(model => model.details.status !== 'UpToDate' && model.details.status !== 'Success')) {
         debug('LUIS app training not finished')
       } else {
         return

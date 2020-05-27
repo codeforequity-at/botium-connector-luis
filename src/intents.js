@@ -99,14 +99,22 @@ const exportLuisIntents = async ({ caps, versionId, newVersionName, publish, wai
   status(`Updated LUIS app ${appVersion.name} to new version ${appVersion.versionId}`, { versionId: appVersion.versionId })
 
   if (waitfortraining) {
-    status(`Waiting for app version ${appVersion.versionId} training`, { versionId: appVersion.versionId })
-    await waitForTraining(container.pluginInstance.caps, appVersion.versionId)
-    status(`App version ${appVersion.versionId} is available and ready for use`, { versionId: appVersion.versionId })
+    try {
+      status(`Waiting for app version ${appVersion.versionId} training`, { versionId: appVersion.versionId })
+      await waitForTraining(container.pluginInstance.caps, appVersion.versionId)
+      status(`App version ${appVersion.versionId} is available and ready for use`, { versionId: appVersion.versionId })
+    } catch (err) {
+      status(err.message, { versionId: appVersion.versionId })
+    }
   }
   if (publish) {
-    status(`Publishing app version ${appVersion.versionId} to ${publish}`, { versionId: appVersion.versionId })
-    await publishAppVersion(container.pluginInstance.caps, appVersion.versionId, publish)
-    status(`App version ${appVersion.versionId} is published to ${publish}`, { versionId: appVersion.versionId })
+    try {
+      status(`Publishing app version ${appVersion.versionId} to ${publish}`, { versionId: appVersion.versionId })
+      await publishAppVersion(container.pluginInstance.caps, appVersion.versionId, publish)
+      status(`App version ${appVersion.versionId} is published to ${publish}`, { versionId: appVersion.versionId })
+    } catch (err) {
+      status(err.message, { versionId: appVersion.versionId })
+    }
   }
 
   const newCaps = _.pickBy(driver.caps, (value, key) => key.startsWith('LUIS_'))
