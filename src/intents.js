@@ -1,4 +1,3 @@
-const path = require('path')
 const moment = require('moment')
 const botium = require('botium-core')
 const _ = require('lodash')
@@ -8,7 +7,6 @@ const { getApp, getAppVersion, uploadAppVersion, waitForTraining, publishAppVers
 
 const getCaps = (caps) => {
   const result = caps || {}
-  result[botium.Capabilities.CONTAINERMODE] = path.resolve(__dirname, '..', 'index.js')
   return result
 }
 
