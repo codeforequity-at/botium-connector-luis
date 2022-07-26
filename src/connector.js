@@ -6,6 +6,12 @@ const _ = require('lodash')
 
 const INCOMPREHENSION_INTENT = 'None'
 
+const INCOMPREHENSION_INTENT_STRUCT = {
+  name: INCOMPREHENSION_INTENT,
+  incomprehension: true,
+  confidence: 1
+}
+
 const isIncomprehension = (intent) => {
   if (intent.intent === INCOMPREHENSION_INTENT) {
     return true
@@ -13,6 +19,7 @@ const isIncomprehension = (intent) => {
 }
 
 const Capabilities = {
+  LUIS_API_VERSION: 'LUIS_API_VERSION',
   LUIS_PREDICTION_ENDPOINT_URL: 'LUIS_PREDICTION_ENDPOINT_URL',
   LUIS_PREDICTION_ENDPOINT_SLOT: 'LUIS_PREDICTION_ENDPOINT_SLOT',
   LUIS_APP_ID: 'LUIS_APP_ID',
@@ -32,14 +39,18 @@ class BotiumConnectorLuis {
 
   async Validate () {
     debug('Validate called')
-    this.caps = Object.assign({}, Defaults, this.caps)
+    const version = this.caps[Capabilities.LUIS_API_VERSION] || 'V2'
+    this.caps = Object.assign({
+      [Capabilities.LUIS_API_VERSION]: version
+    }, Defaults, this.caps)
 
     if (!this.caps[Capabilities.LUIS_PREDICTION_ENDPOINT_URL]) throw new Error('LUIS_PREDICTION_ENDPOINT_URL capability required')
     if (!this.caps[Capabilities.LUIS_APP_ID]) throw new Error('LUIS_APP_ID capability required')
     if (!this.caps[Capabilities.LUIS_ENDPOINT_KEY]) throw new Error('LUIS_ENDPOINT_KEY capability required')
+    if (!['V2', 'V3'].includes(this.caps[Capabilities.LUIS_API_VERSION])) throw new Error(`Unknown API version ${this.caps[Capabilities.LUIS_API_VERSION]}. Just V2 and V3 is supported`)
   }
 
-  UserSays ({ messageText }) {
+  UserSaysV2 ({ messageText }) {
     const queryParams = {
       verbose: true,
       q: messageText,
@@ -225,6 +236,177 @@ class BotiumConnectorLuis {
         }
       })
     })
+  }
+
+  UserSaysV3 ({ messageText }) {
+    const queryParams = {
+      verbose: true,
+      'show-all-intents': true,
+      query: messageText,
+      'subscription-key': this.caps[Capabilities.LUIS_ENDPOINT_KEY]
+    }
+
+    // append query string to endpoint URL
+    const luisRequest = `${this.caps[Capabilities.LUIS_PREDICTION_ENDPOINT_URL]}/luis/prediction/v3.0/apps/${this.caps[Capabilities.LUIS_APP_ID]}/slots/${this.caps[Capabilities.LUIS_PREDICTION_ENDPOINT_SLOT]}/predict?${querystring.stringify(queryParams)}`
+
+    debug(`LUIS Request URL: ${luisRequest}`)
+
+    return new Promise((resolve, reject) => {
+      request(luisRequest, (err, response, body) => {
+        if (err) {
+          return reject(new Error(`LUIS answered with error ${err.message}`))
+        } else {
+          if (response.statusCode !== 200) {
+            return reject(new Error(`LUIS response code: ${response.statusCode} response body: ${body}`))
+          }
+          const data = JSON.parse(body)
+          const intents = Object.entries(data.prediction.intents || {}).map(([key, value]) => ({ name: key, confidence: value, incomprehension: isIncomprehension(key) }))
+          const entities = []
+          try {
+            // vals is an array. Its different for simple and composite entity:
+            // simple entry:
+            // "HomeAutomation.Location": [
+            //   "living room"
+            // ],
+            // composite: (want to buy 2 business ticket)
+            // "TestCompositeEntity": [
+            //   {},
+            //   {
+            //     "TravelClass": [
+            //       [
+            //         "Business"
+            //       ]
+            //     ],
+            //     "$instance": ...
+            //   }
+            // ]
+            for (const [name, vals] of Object.entries(data.prediction.entities || {})) {
+              if (name === '$instance') {
+                continue
+              }
+              if (vals.length === 0) {
+                debug(`Variable ${name} has no value`)
+                continue
+              }
+
+              const isCompositeEntity = typeof vals[0] === 'object'
+
+              // val:
+              //  - primitive type, like 2 or "2"
+              //  - struct, like {} or
+              //    {
+              //     "TravelClass": [
+              //       [
+              //         "Business"
+              //       ]
+              //     ],
+              //     "$instance": ...
+              //   }
+              vals.forEach((val, index) => {
+                if (isCompositeEntity) {
+                  //     subName: "TravelClass"
+                  //     subValues: [["Business"]]
+                  for (const [subName, subValues] of Object.entries(val)) {
+                    if (subName === '$instance') {
+                      continue
+                    }
+                    if (subValues.length === 0) {
+                      debug(`Subvalues not found in compound entity ${JSON.stringify(val)}`)
+                    } else {
+                      subValues.forEach((subValue, subValueIndex) => {
+                        const extractedName = `${name}.${subName}.${subValueIndex + 1}`
+                        entities.push({
+                          name: extractedName,
+                          // compound entities have 2 scrores, like:
+                          // "entities": {
+                          //   "TestCompositeEntity": [
+                          //     {},
+                          //     {
+                          //       "TravelClass": [
+                          //         [
+                          //           "Business"
+                          //         ]
+                          //       ],
+                          //       "$instance": {
+                          //         "TravelClass": [
+                          //           {
+                          //             "type": "TravelClass",
+                          //             "text": "business",
+                          //             "score": 0.98643816,
+                          //           }
+                          //         ]
+                          //       }
+                          //     }
+                          //   ],
+                          //   "$instance": {
+                          //     "TestCompositeEntity": [
+                          //       {
+                          //         "type": "TestCompositeEntity",
+                          //         "text": "business",
+                          //         "score": 0.979149
+                          //       }
+                          //     ]
+                          //   }
+                          // }
+                          confidence: (val.$instance[subName][subValueIndex].score + data.prediction.entities.$instance[name][index].score) / 2,
+                          // maybe we had to extract all entries of the array? But how they got confidence score?
+                          value: subValue[0]
+                        })
+                      })
+                    }
+                  }
+                } else {
+                  const metadata = data.prediction.entities.$instance[name][index]
+                  entities.push({
+                    name,
+                    // converting 2 to '2'
+                    value: `${val}`,
+                    // number has no confidence score.
+                    // {
+                    //   "type": "builtin.number",
+                    //   "text": "2",
+                    //   "startIndex": 12,
+                    //   "length": 1,
+                    //   "modelTypeId": 2,
+                    //   "modelType": "Prebuilt Entity Extractor",
+                    //     "recognitionSources": [
+                    //     "model"
+                    //   ]
+                    // }
+                    confidence: metadata.score
+                  })
+                }
+              })
+            }
+          } catch (err) {
+            debug(`Failed to parse entities from : ${JSON.stringify(data.prediction.entities)}`)
+          }
+          const structuredResponse = {
+            sender: 'bot',
+            nlp: {
+              intent: intents.length === 0 ? INCOMPREHENSION_INTENT_STRUCT : Object.assign({}, intents[0], { intents: intents.slice(1) }),
+              entities
+            },
+            sourceData: {
+              request: luisRequest,
+              response: data
+            }
+          }
+          debug(`Structured response: ${JSON.stringify(structuredResponse, null, 2)}`)
+          setTimeout(() => this.queueBotSays(structuredResponse), 0)
+          return resolve()
+        }
+      })
+    })
+  }
+
+  UserSays (msg) {
+    const isV2 = this.caps[Capabilities.LUIS_API_VERSION] === 'V2'
+    if (isV2) {
+      return this.UserSaysV2(msg)
+    } else {
+      return this.UserSaysV3(msg)
+    }
   }
 }
 

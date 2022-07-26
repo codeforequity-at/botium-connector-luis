@@ -99,6 +99,9 @@ So to start it you have to add your authoring key to the _botium.json_ file. Aft
 
 Set the capability __CONTAINERMODE__ to __luis__ to activate this connector.
 
+### LUIS_API_VERSION
+V2 or V3
+
 ### LUIS_PREDICTION_ENDPOINT_URL
 _Default: https://westus.api.cognitive.microsoft.com_
 

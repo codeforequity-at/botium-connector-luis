@@ -2,9 +2,18 @@ const request = require('request-promise-native')
 
 const debug = require('debug')('botium-connector-luis-helper')
 
+const getPath = (caps) => {
+  const isV2 = caps.LUIS_API_VERSION !== 'V3'
+  if (isV2) {
+    return '/luis/api/v2.0/apps/'
+  } else {
+    return '/luis/authoring/v3.0/apps/'
+  }
+}
+
 module.exports.getApp = async (caps) => {
   const requestOptions = {
-    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL}/luis/api/v2.0/apps/${caps.LUIS_APP_ID}`,
+    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}`,
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
     },
@@ -22,7 +31,7 @@ module.exports.getApp = async (caps) => {
 
 module.exports.getAppVersion = async (caps, version) => {
   const requestOptions = {
-    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL}/luis/api/v2.0/apps/${caps.LUIS_APP_ID}/versions/${version}/export`,
+    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/${version}/export`,
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
     },
@@ -40,7 +49,7 @@ module.exports.getAppVersion = async (caps, version) => {
 
 module.exports.uploadAppVersion = async (caps, version, app) => {
   const requestOptions = {
-    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL}/luis/api/v2.0/apps/${caps.LUIS_APP_ID}/versions/import?${version}`,
+    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/import?${version}`,
     method: 'POST',
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
@@ -61,7 +70,7 @@ module.exports.publishAppVersion = async (caps, version, publish) => {
   if (publish !== 'staging' && publish !== 'production') throw new Error('Publish environment staging or production only')
 
   const requestOptions = {
-    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL}/luis/api/v2.0/apps/${caps.LUIS_APP_ID}/publish`,
+    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/publish`,
     method: 'POST',
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
@@ -84,7 +93,7 @@ module.exports.publishAppVersion = async (caps, version, publish) => {
 
 module.exports.waitForTraining = async (caps, version, interval) => {
   const requestOptionsTemplate = {
-    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL}/luis/api/v2.0/apps/${caps.LUIS_APP_ID}/versions/${version}/train`,
+    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/${version}/train`,
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
     },

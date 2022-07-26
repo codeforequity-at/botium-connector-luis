@@ -32,6 +32,18 @@ module.exports = {
         required: false
       },
       {
+        name: 'LUIS_API_VERSION',
+        label: 'LUIS API Version',
+        description: '"V2" or "V3"',
+        type: 'choice',
+        required: true,
+        default: 'V2',
+        choices: [
+          { key: 'V2', name: 'V2' },
+          { key: 'V3', name: 'V3' }
+        ]
+      },
+      {
         name: 'LUIS_PREDICTION_ENDPOINT_SLOT',
         label: 'LUIS Prediction Endpoint Slot',
         description: '"staging" or "production"',
