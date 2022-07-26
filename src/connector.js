@@ -260,7 +260,7 @@ class BotiumConnectorLuis {
             return reject(new Error(`LUIS response code: ${response.statusCode} response body: ${body}`))
           }
           const data = JSON.parse(body)
-          const intents = Object.entries(data.prediction.intents || {}).map(([key, value]) => ({ name: key, confidence: value, incomprehension: isIncomprehension(key) }))
+          const intents = Object.entries(data.prediction.intents || {}).map(([key, value]) => ({ name: key, confidence: value.score, incomprehension: isIncomprehension(key) }))
           const entities = []
           try {
             // vals is an array. Its different for simple and composite entity:

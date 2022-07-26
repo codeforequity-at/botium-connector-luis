@@ -1,6 +1,6 @@
 {
   "name": "botium-connector-luis",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Botium Connector for Luis",
   "main": "dist/botium-connector-luis-cjs.js",
   "module": "dist/botium-connector-luis-es.js",
