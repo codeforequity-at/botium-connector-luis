@@ -2,6 +2,19 @@ const request = require('request-promise-native')
 
 const debug = require('debug')('botium-connector-luis-helper')
 
+const Capabilities = {
+  LUIS_API_VERSION: 'LUIS_API_VERSION',
+  LUIS_PREDICTION_ENDPOINT_URL: 'LUIS_PREDICTION_ENDPOINT_URL',
+  LUIS_PREDICTION_ENDPOINT_SLOT: 'LUIS_PREDICTION_ENDPOINT_SLOT',
+  LUIS_APP_ID: 'LUIS_APP_ID',
+  LUIS_ENDPOINT_KEY: 'LUIS_ENDPOINT_KEY'
+}
+
+const Defaults = {
+  [Capabilities.LUIS_PREDICTION_ENDPOINT_URL]: 'https://westus.api.cognitive.microsoft.com',
+  [Capabilities.LUIS_PREDICTION_ENDPOINT_SLOT]: 'staging'
+}
+
 const getPath = (caps) => {
   const isV2 = caps.LUIS_API_VERSION !== 'V3'
   if (isV2) {
@@ -11,9 +24,9 @@ const getPath = (caps) => {
   }
 }
 
-module.exports.getApp = async (caps) => {
+const getApp = async (caps) => {
   const requestOptions = {
-    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}`,
+    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}`,
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
     },
@@ -29,9 +42,9 @@ module.exports.getApp = async (caps) => {
   }
 }
 
-module.exports.getAppVersion = async (caps, version) => {
+const getAppVersion = async (caps, version) => {
   const requestOptions = {
-    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/${version}/export`,
+    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/${version}/export`,
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
     },
@@ -47,9 +60,9 @@ module.exports.getAppVersion = async (caps, version) => {
   }
 }
 
-module.exports.uploadAppVersion = async (caps, version, app) => {
+const uploadAppVersion = async (caps, version, app) => {
   const requestOptions = {
-    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/import?${version}`,
+    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/import?${version}`,
     method: 'POST',
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
@@ -66,11 +79,11 @@ module.exports.uploadAppVersion = async (caps, version, app) => {
   }
 }
 
-module.exports.publishAppVersion = async (caps, version, publish) => {
+const publishAppVersion = async (caps, version, publish) => {
   if (publish !== 'staging' && publish !== 'production') throw new Error('Publish environment staging or production only')
 
   const requestOptions = {
-    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/publish`,
+    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/publish`,
     method: 'POST',
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
@@ -91,9 +104,9 @@ module.exports.publishAppVersion = async (caps, version, publish) => {
   }
 }
 
-module.exports.waitForTraining = async (caps, version, interval) => {
+const waitForTraining = async (caps, version, interval) => {
   const requestOptionsTemplate = {
-    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/${version}/train`,
+    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/${version}/train`,
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
     },
@@ -126,4 +139,14 @@ module.exports.waitForTraining = async (caps, version, interval) => {
     }
     await timeout(interval || 5000)
   }
+}
+
+module.exports = {
+  Capabilities,
+  Defaults,
+  getApp,
+  getAppVersion,
+  uploadAppVersion,
+  publishAppVersion,
+  waitForTraining
 }

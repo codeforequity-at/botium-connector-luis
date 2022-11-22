@@ -4,6 +4,8 @@ const request = require('request')
 const querystring = require('querystring')
 const _ = require('lodash')
 
+const { Capabilities, Defaults } = require('./helpers')
+
 const INCOMPREHENSION_INTENT = 'None'
 
 const INCOMPREHENSION_INTENT_STRUCT = {
@@ -16,19 +18,6 @@ const isIncomprehension = (intent) => {
   if (intent.intent === INCOMPREHENSION_INTENT) {
     return true
   }
-}
-
-const Capabilities = {
-  LUIS_API_VERSION: 'LUIS_API_VERSION',
-  LUIS_PREDICTION_ENDPOINT_URL: 'LUIS_PREDICTION_ENDPOINT_URL',
-  LUIS_PREDICTION_ENDPOINT_SLOT: 'LUIS_PREDICTION_ENDPOINT_SLOT',
-  LUIS_APP_ID: 'LUIS_APP_ID',
-  LUIS_ENDPOINT_KEY: 'LUIS_ENDPOINT_KEY'
-}
-
-const Defaults = {
-  [Capabilities.LUIS_PREDICTION_ENDPOINT_URL]: 'https://westus.api.cognitive.microsoft.com',
-  [Capabilities.LUIS_PREDICTION_ENDPOINT_SLOT]: 'staging'
 }
 
 class BotiumConnectorLuis {

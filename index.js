@@ -1,6 +1,7 @@
 const BotiumConnectorLuis = require('./src/connector')
 const { importHandler, importArgs } = require('./src/intents')
 const { exportHandler, exportArgs } = require('./src/intents')
+const { getApp } = require('./src/helpers')
 
 module.exports = {
   PluginVersion: 1,
@@ -74,6 +75,26 @@ module.exports = {
         description: 'Azure Subscription Key for authoring - open your LUIS project, then go to Manage, Azure Resources',
         type: 'secret',
         required: false
+      }
+    ],
+    actions: [
+      {
+        name: 'GetAgentMetaData',
+        description: 'GetAgentMetaData',
+        run: async (caps) => {
+          if (caps && caps.LUIS_API_VERSION && caps.LUIS_APP_ID && caps.LUIS_AUTHORING_KEY) {
+            try {
+              const app = await getApp(caps)
+              return {
+                name: app.name,
+                description: app.description,
+                metadata: app
+              }
+            } catch (err) {
+              throw new Error(`LUIS App Query failed: ${err.message}`)
+            }
+          }
+        }
       }
     ]
   }
