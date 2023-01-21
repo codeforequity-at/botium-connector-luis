@@ -95,6 +95,11 @@ So to start it you have to add your authoring key to the _botium.json_ file. Aft
     > npm install
     > npm test
 
+## Additional Input Parameters
+
+    #begin
+    UPDATE_CUSTOM LUIS_PARAM|spellCheck|true
+
 ## Supported Capabilities
 
 Set the capability __CONTAINERMODE__ to __luis__ to activate this connector.
@@ -111,6 +116,14 @@ _Default: staging_
 Possible values:
 * staging
 * production
+
+### LUIS_PREDICTION_STATIC_PARAMS
+Static parameters to add as endpoint url query parameters
+
+    "LUIS_PREDICTION_STATIC_PARAMS": {
+      "spellCheck": "true",
+      "verbose": "true"
+    }
 
 ### LUIS_APP_ID
 

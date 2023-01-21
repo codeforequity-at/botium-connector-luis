@@ -39,12 +39,15 @@ class BotiumConnectorLuis {
     if (!['V2', 'V3'].includes(this.caps[Capabilities.LUIS_API_VERSION])) throw new Error(`Unknown API version ${this.caps[Capabilities.LUIS_API_VERSION]}. Just V2 and V3 is supported`)
   }
 
-  UserSaysV2 ({ messageText }) {
+  UserSaysV2 (msg) {
+    const { messageText } = msg
+
     const queryParams = {
       verbose: true,
       q: messageText,
       'subscription-key': this.caps[Capabilities.LUIS_ENDPOINT_KEY]
     }
+    this.__addStaticParams(msg, queryParams)
 
     if (this.caps[Capabilities.LUIS_PREDICTION_ENDPOINT_SLOT] === 'staging') {
       queryParams.staging = true
@@ -227,13 +230,16 @@ class BotiumConnectorLuis {
     })
   }
 
-  UserSaysV3 ({ messageText }) {
+  UserSaysV3 (msg) {
+    const { messageText } = msg
+
     const queryParams = {
       verbose: true,
       'show-all-intents': true,
       query: messageText,
       'subscription-key': this.caps[Capabilities.LUIS_ENDPOINT_KEY]
     }
+    this.__addStaticParams(msg, queryParams)
 
     // append query string to endpoint URL
     const luisRequest = `${this.caps[Capabilities.LUIS_PREDICTION_ENDPOINT_URL]}/luis/prediction/v3.0/apps/${this.caps[Capabilities.LUIS_APP_ID]}/slots/${this.caps[Capabilities.LUIS_PREDICTION_ENDPOINT_SLOT]}/predict?${querystring.stringify(queryParams)}`
@@ -396,6 +402,20 @@ class BotiumConnectorLuis {
     } else {
       return this.UserSaysV3(msg)
     }
+  }
+
+  __addStaticParams (msg, queryParams) {
+    if (this.caps[Capabilities.LUIS_PREDICTION_STATIC_PARAMS]) {
+      for (const [key, value] of Object.entries(this.caps[Capabilities.LUIS_PREDICTION_STATIC_PARAMS])) {
+        queryParams[key] = `${value}`
+      }
+    }
+    if (msg.LUIS_PARAM && _.isObject(msg.LUIS_PARAM)) {
+      for (const [key, value] of Object.entries(msg.LUIS_PARAM)) {
+        queryParams[key] = `${value}`
+      }
+    }
+    return queryParams
   }
 }
 

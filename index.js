@@ -75,6 +75,13 @@ module.exports = {
         description: 'Azure Subscription Key for authoring - open your LUIS project, then go to Manage, Azure Resources',
         type: 'secret',
         required: false
+      },
+      {
+        name: 'LUIS_PREDICTION_STATIC_PARAMS',
+        label: 'Additional Query Parameters',
+        description: 'Static parameters to add as endpoint url query parameters',
+        type: 'dictionary',
+        required: false
       }
     ],
     actions: [

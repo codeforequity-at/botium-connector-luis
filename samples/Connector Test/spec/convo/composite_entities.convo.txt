@@ -2,6 +2,7 @@ composite entities
 
 #me
 want to buy 2 business ticket
+UPDATE_CUSTOM LUIS_PARAM|someCustomParameter|1234
 
 #bot
 INTENT buy_ticket

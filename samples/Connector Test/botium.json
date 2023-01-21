@@ -4,7 +4,11 @@
       "PROJECTNAME": "Botium Sample for LUIS",
       "CONTAINERMODE": "luis",
       "LUIS_APP_ID": "...",
-      "LUIS_ENDPOINT_KEY": "..."
+      "LUIS_ENDPOINT_KEY": "...",
+      "LUIS_PREDICTION_STATIC_PARAMS": {
+        "spellCheck": "true",
+        "verbose": "true"
+      }
     }
   }
 }

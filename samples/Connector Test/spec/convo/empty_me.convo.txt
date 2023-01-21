@@ -1,5 +1,8 @@
 empty me
 
+#begin
+UPDATE_CUSTOM LUIS_PARAM|spellCheck|true
+
 #me
 
 
