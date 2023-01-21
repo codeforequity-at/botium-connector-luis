@@ -211,9 +211,7 @@ class BotiumConnectorLuis {
                 name: data.topScoringIntent.intent,
                 incomprehension: isIncomprehension(data.topScoringIntent),
                 confidence: data.topScoringIntent.score,
-                intents: data.intents ? data.intents.map((intent) => {
-                  return { name: intent.intent, confidence: intent.score, incomprehension: isIncomprehension(intent) }
-                }) : []
+                intents: data.intents ? data.intents.map((intent) => ({ name: intent.intent, confidence: intent.score, incomprehension: isIncomprehension(intent) })) : []
               },
               entities: normalizeEntities(data)
             },
