@@ -8,7 +8,9 @@ const Capabilities = {
   LUIS_PREDICTION_ENDPOINT_SLOT: 'LUIS_PREDICTION_ENDPOINT_SLOT',
   LUIS_PREDICTION_STATIC_PARAMS: 'LUIS_PREDICTION_STATIC_PARAMS',
   LUIS_APP_ID: 'LUIS_APP_ID',
-  LUIS_ENDPOINT_KEY: 'LUIS_ENDPOINT_KEY'
+  LUIS_ENDPOINT_KEY: 'LUIS_ENDPOINT_KEY',
+  LUIS_AUTHORING_KEY: 'LUIS_AUTHORING_KEY',
+  LUIS_AUTHORING_ENDPOINT_URL: 'LUIS_AUTHORING_ENDPOINT_URL'
 }
 
 const Defaults = {
@@ -27,7 +29,7 @@ const getPath = (caps) => {
 
 const getApp = async (caps) => {
   const requestOptions = {
-    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}`,
+    uri: `${caps.LUIS_AUTHORING_ENDPOINT_URL || caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}`,
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
     },
@@ -45,7 +47,7 @@ const getApp = async (caps) => {
 
 const getAppVersion = async (caps, version) => {
   const requestOptions = {
-    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/${version}/export`,
+    uri: `${caps.LUIS_AUTHORING_ENDPOINT_URL || caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/${version}/export`,
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
     },
@@ -63,7 +65,7 @@ const getAppVersion = async (caps, version) => {
 
 const uploadAppVersion = async (caps, version, app) => {
   const requestOptions = {
-    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/import?${version}`,
+    uri: `${caps.LUIS_AUTHORING_ENDPOINT_URL || caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/import?${version}`,
     method: 'POST',
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
@@ -84,7 +86,7 @@ const publishAppVersion = async (caps, version, publish) => {
   if (publish !== 'staging' && publish !== 'production') throw new Error('Publish environment staging or production only')
 
   const requestOptions = {
-    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/publish`,
+    uri: `${caps.LUIS_AUTHORING_ENDPOINT_URL || caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/publish`,
     method: 'POST',
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
@@ -107,7 +109,7 @@ const publishAppVersion = async (caps, version, publish) => {
 
 const waitForTraining = async (caps, version, interval) => {
   const requestOptionsTemplate = {
-    uri: `${caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/${version}/train`,
+    uri: `${caps.LUIS_AUTHORING_ENDPOINT_URL || caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/${version}/train`,
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
     },

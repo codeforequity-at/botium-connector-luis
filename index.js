@@ -28,7 +28,7 @@ module.exports = {
       {
         name: 'LUIS_PREDICTION_ENDPOINT_URL',
         label: 'LUIS Prediction Endpoint URL',
-        description: 'By default, "https://westus.api.cognitive.microsoft.com" will be used',
+        description: 'By default "https://westus.api.cognitive.microsoft.com" will be used',
         type: 'url',
         required: false
       },
@@ -75,6 +75,12 @@ module.exports = {
         description: 'Azure Subscription Key for authoring - open your LUIS project, then go to Manage, Azure Resources',
         type: 'secret',
         required: false
+      },
+      {
+        name: 'LUIS_AUTHORING_ENDPOINT_URL',
+        label: 'LUIS Authoring Endpoint URL',
+        description: 'By default prediction endpoint is used. In special cases authoring endpoint can be different',
+        type: 'string'
       },
       {
         name: 'LUIS_PREDICTION_STATIC_PARAMS',
