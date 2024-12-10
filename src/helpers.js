@@ -1,5 +1,3 @@
-const request = require('request-promise-native')
-
 const debug = require('debug')('botium-connector-luis-helper')
 
 const Capabilities = {
@@ -31,15 +29,20 @@ const getApp = async (caps) => {
   const requestOptions = {
     uri: `${caps.LUIS_AUTHORING_ENDPOINT_URL || caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}`,
     headers: {
-      'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
-    },
-    json: true
+      'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY,
+      accept: 'application/json'
+    }
   }
+
   debug(`getApp request: ${JSON.stringify(requestOptions, null, 2)}`)
   try {
-    const response = await request(requestOptions)
-    debug(`getApp response: ${JSON.stringify(response, null, 2)}`)
-    return response
+    const response = await fetch(requestOptions.uri, requestOptions)
+    const body = await response.json()
+    if (!response.ok) {
+      throw new Error(`getApp failed: ${response.status}/${body?.error?.message || response.statusText}`)
+    }
+    debug(`getApp response: ${JSON.stringify(body, null, 2)}`)
+    return body
   } catch (err) {
     throw new Error(`LUIS getApp connection failed: ${err.message}`)
   }
@@ -50,14 +53,17 @@ const getAppVersion = async (caps, version) => {
     uri: `${caps.LUIS_AUTHORING_ENDPOINT_URL || caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/${version}/export`,
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
-    },
-    json: true
+    }
   }
   debug(`getAppVersion request: ${JSON.stringify(requestOptions, null, 2)}`)
   try {
-    const response = await request(requestOptions)
-    debug(`getAppVersion response: ${JSON.stringify(response, null, 2)}`)
-    return response
+    const response = await fetch(requestOptions.uri, requestOptions)
+    const body = await response.json()
+    if (!response.ok) {
+      throw new Error(`getAppVersion failed: ${response.status}/${body?.error?.message || response.statusText}`)
+    }
+    debug(`getAppVersion response: ${JSON.stringify(body, null, 2)}`)
+    return body
   } catch (err) {
     throw new Error(`LUIS getAppVersion connection failed: ${err.message}`)
   }
@@ -74,9 +80,13 @@ const uploadAppVersion = async (caps, version, app) => {
   }
   debug(`uploadAppVersion request: ${JSON.stringify(requestOptions, null, 2)}`)
   try {
-    const response = await request(requestOptions)
-    debug(`uploadAppVersion response: ${JSON.stringify(response, null, 2)}`)
-    return response
+    const response = await fetch(requestOptions.uri, requestOptions)
+    const body = await response.json()
+    if (!response.ok) {
+      throw new Error(`uploadAppVersion failed: ${response.status}/${body?.error?.message || response.statusText}`)
+    }
+    debug(`uploadAppVersion response: ${JSON.stringify(body, null, 2)}`)
+    return body
   } catch (err) {
     throw new Error(`LUIS uploadAppVersion connection failed: ${err.message}`)
   }
@@ -91,17 +101,21 @@ const publishAppVersion = async (caps, version, publish) => {
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
     },
-    json: {
+    body: JSON.stringify({
       versionId: version,
       isStaging: (publish !== 'production'),
       directVersionPublish: false
-    }
+    })
   }
   debug(`publishAppVersion request: ${JSON.stringify(requestOptions, null, 2)}`)
   try {
-    const response = await request(requestOptions)
-    debug(`publishAppVersion response: ${JSON.stringify(response, null, 2)}`)
-    return response
+    const response = await fetch(requestOptions.uri, requestOptions)
+    const body = await response.json()
+    if (!response.ok) {
+      throw new Error(`publishAppVersion failed: ${response.status}/${body?.error?.message || response.statusText}`)
+    }
+    debug(`LUIS publishAppVersion response: ${JSON.stringify(body, null, 2)}`)
+    return body
   } catch (err) {
     throw new Error(`LUIS publishAppVersion connection failed: ${err.message}`)
   }
@@ -112,29 +126,36 @@ const waitForTraining = async (caps, version, interval) => {
     uri: `${caps.LUIS_AUTHORING_ENDPOINT_URL || caps.LUIS_PREDICTION_ENDPOINT_URL || Defaults.LUIS_PREDICTION_ENDPOINT_URL}${getPath(caps)}${caps.LUIS_APP_ID}/versions/${version}/train`,
     headers: {
       'Ocp-Apim-Subscription-Key': caps.LUIS_AUTHORING_KEY || caps.LUIS_ENDPOINT_KEY
-    },
-    json: true
+    }
   }
   try {
-    const response = await request(Object.assign({}, requestOptionsTemplate, { method: 'POST' }))
-    debug(`waitForTraining start training response: ${JSON.stringify(response, null, 2)}`)
+    const response = await fetch(requestOptionsTemplate.uri, Object.assign({}, requestOptionsTemplate, { method: 'POST' }))
+    const body = await response.json()
+    if (!response.ok) {
+      throw new Error(`waitForTraining start training failed: ${response.status}/${body?.error?.message || response.statusText}`)
+    }
+    debug(`waitForTraining start training response: ${JSON.stringify(body, null, 2)}`)
   } catch (err) {
     throw new Error(`LUIS waitForTraining connection failed: ${err.message}`)
   }
   const timeout = ms => new Promise(resolve => setTimeout(resolve, ms))
   while (true) {
     debug(`LUIS checking training status ${version}`)
-    let response = null
+    let body = null
     try {
-      response = await request(Object.assign({}, requestOptionsTemplate, { method: 'GET' }))
-      debug(`waitForTraining check training status response: ${JSON.stringify(response, null, 2)}`)
+      const response = await fetch(requestOptionsTemplate.uri, Object.assign({}, requestOptionsTemplate, { method: 'POST' }))
+      body = await response.json()
+      if (!response.ok) {
+        throw new Error(`waitForTraining check training status failed: ${response.status}/${body?.error?.message || response.statusText}`)
+      }
+      debug(`waitForTraining check training status response: ${JSON.stringify(body, null, 2)}`)
     } catch (err) {
       debug(`LUIS error on availability check ${err.message}`)
     }
-    if (response) {
-      if (response.find(model => model.details.status === 'Fail')) {
+    if (body) {
+      if (body.find(model => model.details.status === 'Fail')) {
         throw new Error('LUIS app training failed. See Microsoft LUIS app for details.')
-      } else if (response.find(model => model.details.status !== 'UpToDate' && model.details.status !== 'Success')) {
+      } else if (body.find(model => model.details.status !== 'UpToDate' && model.details.status !== 'Success')) {
         debug('LUIS app training not finished')
       } else {
         return
