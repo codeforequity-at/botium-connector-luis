@@ -11,7 +11,9 @@
     "build": "npm run eslint && rollup -c",
     "eslint": "eslint index.js src",
     "eslint-fix": "eslint --fix index.js src",
-    "update-dependencies": "npm-check-updates -u --timeout 120000"
+    "update-dependencies": "npm-check-updates -u --timeout 120000",
+    "test": "echo 'Not implemented yet'",
+    "test-nightly": "echo 'Not implemented yet'"
   },
   "repository": {
     "type": "git",
